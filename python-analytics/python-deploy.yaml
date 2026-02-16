@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: python-analytics
   namespace: health-app
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: python-analytics=yourdockerhub/python-analytics
+    argocd-image-updater.argoproj.io/python-analytics.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
 spec:
   replicas: 1
   selector:

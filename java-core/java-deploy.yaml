@@ -3,6 +3,11 @@ kind: Deployment
 metadata:
   name: java-core
   namespace: health-app
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: java-core=alphaomega55/spring-boot-app
+    argocd-image-updater.argoproj.io/java-core.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
+
 spec:
   replicas: 1
   selector:
