@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-core
+  namespace: health-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-core
+  template:
+    metadata:
+      labels:
+        app: java-core
+    spec:
+      containers:
+        - name: java-core
+          image: alphaomega55/spring-boot-app:latest
+          ports:
+            - containerPort: 8080
+
+          envFrom:
+            - configMapRef:
+                name: java-core-config
+
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-core
+  namespace: health-app
+spec:
+  selector:
+    app: java-core
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP

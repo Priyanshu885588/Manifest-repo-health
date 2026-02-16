@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-ingestion
+  namespace: health-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-ingestion
+  template:
+    metadata:
+      labels:
+        app: node-ingestion
+    spec:
+      containers:
+        - name: node-ingestion
+          image: alphaomega55/node-ingestion:latest
+          ports:
+            - containerPort: 3000
+
+          envFrom:
+            - configMapRef:
+                name: node-ingestion-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-ingestion
+  namespace: health-app
+spec:
+  selector:
+    app: node-ingestion
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP

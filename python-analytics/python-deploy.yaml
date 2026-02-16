@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-analytics
+  namespace: health-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-analytics
+  template:
+    metadata:
+      labels:
+        app: python-analytics
+    spec:
+      containers:
+        - name: python-analytics
+          image: alphaomega55/python-analytics:latest
+
+          envFrom:
+            - configMapRef:
+                name: python-analytics-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-analytics
+  namespace: health-app
+spec:
+  selector:
+    app: python-analytics
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-ingestion-config
+  namespace: health-app
+data:
+  REDIS_HOST: redis
